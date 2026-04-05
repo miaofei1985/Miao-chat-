@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the chat application.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "User ID" },
+        "displayName": { "type": "string", "description": "User's display name" },
+        "photoURL": { "type": "string", "description": "User's avatar URL" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "isOnline": { "type": "boolean", "description": "Whether the user is currently online" },
+        "lastSeen": { "type": "timestamp", "description": "When the user was last online" }
+      },
+      "required": ["uid", "displayName", "email"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "A chat conversation between two or more users.",
+      "type": "object",
+      "properties": {
+        "participants": { 
+          "type": "array", 
+          "items": { "type": "string" },
+          "description": "Array of user IDs participating in the chat" 
+        },
+        "lastMessage": { "type": "string", "description": "The text of the last message sent" },
+        "lastMessageTime": { "type": "timestamp", "description": "When the last message was sent" },
+        "updatedAt": { "type": "timestamp", "description": "When the chat was last updated" }
+      },
+      "required": ["participants", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A single message within a chat.",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string", "description": "The message content" },
+        "senderId": { "type": "string", "description": "User ID of the sender" },
+        "createdAt": { "type": "timestamp", "description": "When the message was sent" }
+      },
+      "required": ["text", "senderId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user profiles."
+    },
+    "/chats/{chatId}": {
+      "schema": { "$ref": "#/entities/Chat" },
+      "description": "Stores chat conversations."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Stores messages within a chat."
+    }
+  }
+}
